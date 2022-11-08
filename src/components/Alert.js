@@ -12,7 +12,7 @@ top:10px;
 `
 const StyledCloseIcon = styled(CloseIcon)`
     path {
-      fill: #1513A0;
+      fill: ${(props) => (props.color === "warning" ? "#1513A0" : "#F6F6FE")};
     }
 `;
 
@@ -27,43 +27,38 @@ const StyledAlertBase = styled.div`
  line-height: 25px;
  width: 100%;
  max-width: 1440px;
+ background: ${props => getBackgroundColor(props.color)};
+ color: ${props => getTextColor(props.color)};
 `;
 
-const StyledPrimaryAlert = styled(StyledAlertBase)`
-  background: #605DEC;
-  color:#F6F6FE;
-`;
+const getBackgroundColor = (color) => {
+	  switch (color) {
+	    case "warning":
+	      return "#FFD12F;";
+	    case "error":
+	      return "#EB5757;";
+	    default:
+	      return "#605DEC";
+	  };
+};
 
-const StyledErrorAlert = styled(StyledAlertBase)`
-  background: #EB5757;
-  color: #FAFAFA;
-`;
-
-const StyledWarningAlert = styled(StyledAlertBase)`
-  background: #FFD12F;
-  color: #1513A0;
-`;
+const getTextColor = (color) => {
+  switch (color) {
+    case "warning":
+      return  "#1513A0;";
+    case "error":
+      return "#FAFAFA;";
+    default:
+      return "#F6F6FE;";
+  };
+};
    
 const Alert = ({ children, onClose, color }) => {
-     
-    if (color === "error") {
-      return <StyledErrorAlert onClick={onClose }>
-        {children}
-        <StyledCloseButton><CloseIcon/></StyledCloseButton>
-      </StyledErrorAlert>;
-    }
-
-    if (color === "warning") {
-      return <StyledWarningAlert onClick={onClose }>
-        {children}
-          <StyledCloseButton><StyledCloseIcon /></StyledCloseButton>
-      </StyledWarningAlert>;
-    }
-
-  return <StyledPrimaryAlert onClick={onClose }>
+      
+  return <StyledAlertBase onClick={onClose } color={color}>
       {children} 
-        <StyledCloseButton ><CloseIcon /></StyledCloseButton>
-    </StyledPrimaryAlert>;
+        <StyledCloseButton ><StyledCloseIcon color={color} /></StyledCloseButton>
+    </StyledAlertBase>;
 };
 
 Alert.propTypes = {
